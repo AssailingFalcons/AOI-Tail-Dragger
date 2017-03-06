@@ -1,0 +1,45 @@
+%Angle of Incidence- Tail Dragger (MATLAB file)
+
+clc
+clear all
+
+L= 115;           %Distance between LEw to LEt
+H= 25;            %Chord of H-stab 
+B= 15;            %Height of the fuselage
+w= -7;          %Height of center of wing integration above the top of fuselage 
+c= 5;             %Clearance of the trailing edge of H-stab from the ground 
+k= -2;             %Distance betweem MLG from LEw (+ve if MLG is after LEw)
+for x=7:0.5:10;     %Height of TG
+    for y=30:0.5:130;       %Distance btw MLG and TG   
+        for z=20:0.5:25;        %Height of MLG
+           for E=5:0.5:10;      %Height difference of LEw to LEt
+                T=z+B+w-E-x;    %Height of TG from the ground when plane is horizontal 
+                U=z+B+w-E;      %Height of tail boom above the ground when the plane is horizontal
+                V=L+H-y-k;      %Distance between TG and trailing edge of H-stab
+                dis1=4*(V*c)^2-4*(V^2+x^2)*(c^2-x^2);
+                dis2=(2*H*c+2*L*c)^2-4*(L^2+H^2+2*L*H+U^2)*(c^2-U^2);
+          
+                if (dis1>0 && dis2>0)
+                    alpha1=asind((-2*V*c+sqrt(dis1))/(2*(V^2+x^2)));     %for eqn_1
+                    alpha11=round(alpha1);                          %for eqn1
+                    alpha2=atand(T/y);               %for eqn_2
+                    alpha22=round(alpha2);      %for eqn_2
+                    alpha3=asind((-(2*H*c+2*L*c)+sqrt(dis2))/(2*(L^2+H^2+2*L*H+U^2)));       %for eqn_3
+                    alpha33=round(alpha3);                                              %for eqn_3
+                    
+                    if(alpha11==alpha22 && alpha22==alpha33)
+                        alpha=alpha11;
+                        if(alpha>8 && alpha<15)
+                        disp(['The value of theta1 is:    ',num2str(alpha)]);
+                        disp(['The value of x is:    ',num2str(x)]);
+                        disp(['The value of y is:    ',num2str(y)]);
+                        disp(['The value of z is:    ',num2str(z)]);
+                        disp(['The value of E is:    ',num2str(E)]);
+                        disp('####################');
+                        end
+                    end
+               end
+            end
+        end
+    end
+end
